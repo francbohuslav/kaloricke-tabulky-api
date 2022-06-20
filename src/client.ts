@@ -1,15 +1,16 @@
 import axios from "axios";
 import { ICodeResponse, IDiaryDay, IFoodDefinition, ILoginResponse } from "./interfaces";
 import { KalTabError } from "./kal-tab-error";
+var md5 = require("md5");
 
 export default class Client {
     baseURL: string = "https://www.kaloricketabulky.cz";
     sessionId: string;
 
-    public async login(email: string, hashedPassword: string): Promise<void> {
+    public async login(email: string, password: string): Promise<void> {
         const response = await axios.post<ILoginResponse>(this.baseURL + "/login/create?format=json", {
             email,
-            password: hashedPassword,
+            password: md5(password),
         });
         this.processCodeResponse(response.data);
         const cookie = response.headers["set-cookie"]?.find((cookie) => cookie.startsWith("JSESSIONID="));

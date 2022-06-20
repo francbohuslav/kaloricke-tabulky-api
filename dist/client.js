@@ -14,16 +14,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
 const kal_tab_error_1 = require("./kal-tab-error");
+var md5 = require("md5");
 class Client {
     constructor() {
         this.baseURL = "https://www.kaloricketabulky.cz";
     }
-    login(email, hashedPassword) {
+    login(email, password) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield axios_1.default.post(this.baseURL + "/login/create?format=json", {
                 email,
-                password: hashedPassword,
+                password: md5(password),
             });
             this.processCodeResponse(response.data);
             const cookie = (_a = response.headers["set-cookie"]) === null || _a === void 0 ? void 0 : _a.find((cookie) => cookie.startsWith("JSESSIONID="));
