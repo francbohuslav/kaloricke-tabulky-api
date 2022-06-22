@@ -158,3 +158,24 @@ interface IFoodUsage {
     /** false */
     isRecipe: boolean;
 }
+
+export interface IDiarySummary {
+    items: any;
+    itemsDynamic: any;
+    /*  144 */
+    activityEnergyTotal: number;
+    /* : 1437 */
+    foodstuffEnergyTotal: number;
+    /* : "144" */
+    digestion: number;
+    /* : "kcal" */
+    energyUnit: string;
+    /* : "79" */
+    weight: string;
+    /* : null */
+    alcohol: any;
+    /* : 1 */
+    mode: number;
+    /* : false */
+    nutrientsFromActivities: boolean;
+}

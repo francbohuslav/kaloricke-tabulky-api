@@ -11,19 +11,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./client"), exports);
-// export Client;
-/*
-const client = new Client();
-(async () => {
-    try {
-        // await client.login("franc.bohuslav@gmail.com", "***");
-        const food = await client.searchFood("jablko");
-        const diary = await client.getDiary(new Date(2022, 5, 21));
-        console.log(diary.times[1].foodstuff.length);
-    } catch (ex) {
-        console.error(ex.message);
-        console.error(ex.data);
-    }
-})();
-*/
+__exportStar(require("./commander"), exports);
 //# sourceMappingURL=index.js.map

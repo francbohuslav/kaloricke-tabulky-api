@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Client = void 0;
 const axios_1 = __importDefault(require("axios"));
 const kal_tab_error_1 = require("./kal-tab-error");
 var md5 = require("md5");
@@ -62,6 +63,21 @@ class Client {
             return response.data.data;
         });
     }
+    getSummary(date) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const dateStr = this.twoLetters(date.getDate()) + "." + this.twoLetters(date.getMonth() + 1) + "." + date.getFullYear();
+            const response = yield axios_1.default.get(this.baseURL + `/user/diary/summary/${dateStr}/get`, {
+                params: {
+                    format: "json",
+                },
+                headers: {
+                    Cookie: "JSESSIONID=" + this.sessionId,
+                },
+            });
+            this.processCodeResponse(response.data);
+            return response.data.data;
+        });
+    }
     processCodeResponse(data) {
         if (data.code === undefined) {
             throw new kal_tab_error_1.KalTabError("Wrong data", data);
@@ -74,5 +90,5 @@ class Client {
         return (number + "").padStart(2, "0");
     }
 }
-exports.default = Client;
+exports.Client = Client;
 //# sourceMappingURL=client.js.map

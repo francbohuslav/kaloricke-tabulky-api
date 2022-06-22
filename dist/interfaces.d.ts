@@ -154,4 +154,16 @@ interface IFoodUsage {
     /** false */
     isRecipe: boolean;
 }
+export interface IDiarySummary {
+    items: any;
+    itemsDynamic: any;
+    activityEnergyTotal: number;
+    foodstuffEnergyTotal: number;
+    digestion: number;
+    energyUnit: string;
+    weight: string;
+    alcohol: any;
+    mode: number;
+    nutrientsFromActivities: boolean;
+}
 export {};

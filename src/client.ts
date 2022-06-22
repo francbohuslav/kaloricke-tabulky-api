@@ -1,9 +1,9 @@
 import axios from "axios";
-import { ICodeResponse, IDiaryDay, IFoodDefinition, ILoginResponse } from "./interfaces";
+import { ICodeResponse, IDiaryDay, IDiarySummary, IFoodDefinition, ILoginResponse } from "./interfaces";
 import { KalTabError } from "./kal-tab-error";
 var md5 = require("md5");
 
-export default class Client {
+export class Client {
     baseURL: string = "https://www.kaloricketabulky.cz";
     sessionId: string;
 
@@ -32,9 +32,23 @@ export default class Client {
         return response.data;
     }
 
-    public async getDiary(date: Date) {
+    public async getDiary(date: Date): Promise<IDiaryDay> {
         const dateStr = this.twoLetters(date.getDate()) + "." + this.twoLetters(date.getMonth() + 1) + "." + date.getFullYear();
         const response = await axios.get<ICodeResponse<IDiaryDay>>(this.baseURL + `/user/diary/${dateStr}/get`, {
+            params: {
+                format: "json",
+            },
+            headers: {
+                Cookie: "JSESSIONID=" + this.sessionId,
+            },
+        });
+        this.processCodeResponse(response.data);
+        return response.data.data;
+    }
+
+    public async getSummary(date: Date): Promise<IDiarySummary> {
+        const dateStr = this.twoLetters(date.getDate()) + "." + this.twoLetters(date.getMonth() + 1) + "." + date.getFullYear();
+        const response = await axios.get<ICodeResponse<IDiarySummary>>(this.baseURL + `/user/diary/summary/${dateStr}/get`, {
             params: {
                 format: "json",
             },
