@@ -40,6 +40,6 @@ describe("Commander", () => {
 
     test("moje kalorie", async () => {
         const answer = await commander.execute("moje kalorie");
-        expect(answer).toMatch(/Tvoje bilance je \d+ kalorií/);
+        expect(answer).toMatch(/Tvoje bilance je \d+ kilokalorií/);
     });
 });

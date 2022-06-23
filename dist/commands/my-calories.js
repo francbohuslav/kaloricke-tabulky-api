@@ -17,7 +17,7 @@ class MyCaloriesCommand extends command_base_1.CommandBase {
         return __awaiter(this, void 0, void 0, function* () {
             const summary = yield client.getSummary(new Date());
             const totalCalories = summary.foodstuffEnergyTotal - summary.activityEnergyTotal;
-            return `Tvoje bilance je ${totalCalories} kalorií`;
+            return `Tvoje bilance je ${totalCalories} kilokalorií`;
         });
     }
 }

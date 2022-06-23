@@ -13,7 +13,7 @@ exports.CaloriesCommand = void 0;
 const command_base_1 = require("./command-base");
 class CaloriesCommand extends command_base_1.CommandBase {
     parse(questionRest) {
-        const match = questionRest.match(/(.*) (\d+) g(ramů)?$/);
+        const match = questionRest.match(/(.*) (\d+)\s?g(ramů)?$/);
         console.log(match);
         if (match) {
             this.food = match[1];
@@ -31,7 +31,7 @@ class CaloriesCommand extends command_base_1.CommandBase {
                 return `Potravina ${this.food} nenanezena`;
             }
             const cals = Math.round((parseInt(foods[0].value) / 100) * this.grams);
-            return `Potravina ${foods[0].title} má ${cals} kalorií`;
+            return `Potravina ${foods[0].title} má ${cals} kilokalorií`;
         });
     }
 }
