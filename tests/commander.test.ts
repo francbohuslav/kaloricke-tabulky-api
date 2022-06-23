@@ -20,19 +20,21 @@ describe("Commander", () => {
     describe("kalorie", () => {
         test("jablko", async () => {
             const answer = await commander.execute("kalorie jablko");
-            expect(answer).toBe("Potravina jablko má 63 kalorií");
+            expect(answer).toBe("Potravina jablko má 63 kilokalorií");
         });
 
         test("jablko 200 gramů", async () => {
             let answer = await commander.execute("kalorie jablko 150 gramů");
-            expect(answer).toBe("Potravina jablko má 95 kalorií");
+            expect(answer).toBe("Potravina jablko má 95 kilokalorií");
             answer = await commander.execute("kalorie jablko 150 g");
-            expect(answer).toBe("Potravina jablko má 95 kalorií");
+            expect(answer).toBe("Potravina jablko má 95 kilokalorií");
+            answer = await commander.execute("kalorie jablko 150g");
+            expect(answer).toBe("Potravina jablko má 95 kilokalorií");
         });
 
         test("mléko", async () => {
             const answer = await commander.execute("kalorie mléko");
-            expect(answer).toBe("Potravina mléko polotučné 1,5% tuku má 47 kalorií");
+            expect(answer).toBe("Potravina mléko polotučné 1,5% tuku má 47 kilokalorií");
         });
     });
 
