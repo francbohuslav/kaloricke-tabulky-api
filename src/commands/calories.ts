@@ -7,7 +7,7 @@ export class CaloriesCommand extends CommandBase {
     grams: number;
 
     parse(questionRest: string): void {
-        const match = questionRest.match(/(.*) (\d+) gramů$/);
+        const match = questionRest.match(/(.*) (\d+) g(ramů)?$/);
         console.log(match);
         if (match) {
             this.food = match[1];

@@ -24,7 +24,9 @@ describe("Commander", () => {
         });
 
         test("jablko 200 gramů", async () => {
-            const answer = await commander.execute("kalorie jablko 150 gramů");
+            let answer = await commander.execute("kalorie jablko 150 gramů");
+            expect(answer).toBe("Potravina jablko má 95 kalorií");
+            answer = await commander.execute("kalorie jablko 150 g");
             expect(answer).toBe("Potravina jablko má 95 kalorií");
         });
 

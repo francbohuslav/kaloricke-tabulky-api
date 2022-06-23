@@ -1,6 +1,6 @@
 {
-    "name": "kaloricke-tabulky-apo",
-    "version": "1.0.0",
+    "name": "kaloricke-tabulky-api",
+    "version": "1.0.2",
     "description": "Library for Kaloricke Tabulky API",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",

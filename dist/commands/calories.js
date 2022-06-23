@@ -13,7 +13,7 @@ exports.CaloriesCommand = void 0;
 const command_base_1 = require("./command-base");
 class CaloriesCommand extends command_base_1.CommandBase {
     parse(questionRest) {
-        const match = questionRest.match(/(.*) (\d+) gramů$/);
+        const match = questionRest.match(/(.*) (\d+) g(ramů)?$/);
         console.log(match);
         if (match) {
             this.food = match[1];
