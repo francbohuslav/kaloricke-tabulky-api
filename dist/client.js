@@ -50,8 +50,7 @@ class Client {
     }
     getDiary(date) {
         return __awaiter(this, void 0, void 0, function* () {
-            const dateStr = this.twoLetters(date.getDate()) + "." + this.twoLetters(date.getMonth() + 1) + "." + date.getFullYear();
-            const response = yield axios_1.default.get(this.baseURL + `/user/diary/${dateStr}/get`, {
+            const response = yield axios_1.default.get(this.baseURL + `/user/diary/${this.getDate(date)}/get`, {
                 params: {
                     format: "json",
                 },
@@ -65,8 +64,7 @@ class Client {
     }
     getSummary(date) {
         return __awaiter(this, void 0, void 0, function* () {
-            const dateStr = this.twoLetters(date.getDate()) + "." + this.twoLetters(date.getMonth() + 1) + "." + date.getFullYear();
-            const response = yield axios_1.default.get(this.baseURL + `/user/diary/summary/${dateStr}/get`, {
+            const response = yield axios_1.default.get(this.baseURL + `/user/diary/summary/${this.getDate(date)}/get`, {
                 params: {
                     format: "json",
                 },
@@ -77,6 +75,57 @@ class Client {
             this.processCodeResponse(response.data);
             return response.data.data;
         });
+    }
+    saveFood(food, date, grams, diaryTimeGuid) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const dtoIn = {
+                guid: food.id,
+                title: food.title,
+                url: "potraviny/" + food.url,
+                date: this.getDate(date),
+                multiplier: grams.toString(),
+                diaryTimeGuid,
+                unitGuid: "0000000000000001",
+                unitOptions: [
+                    {
+                        id: "0000000000000001",
+                        title: "1 g",
+                        multiplier: 1,
+                    },
+                ],
+            };
+            console.log(dtoIn);
+            const response = yield axios_1.default.post(this.baseURL + `/user/foodstuff/add`, dtoIn, {
+                params: {
+                    format: "json",
+                },
+                headers: {
+                    Cookie: "JSESSIONID=" + this.sessionId,
+                },
+            });
+            this.processCodeResponse(response.data);
+            return response.data.message;
+        });
+    }
+    deleteFoodUsage(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield axios_1.default.get(this.baseURL + `/user/diary/foodstuff/delete/${id}`, {
+                params: {
+                    format: "json",
+                },
+                headers: {
+                    Cookie: "JSESSIONID=" + this.sessionId,
+                },
+            });
+            this.processCodeResponse(response.data);
+            if (response.data.message != "OK") {
+                throw new kal_tab_error_1.KalTabError(response.data.message, response.data);
+            }
+        });
+    }
+    getDate(date) {
+        const dateStr = this.twoLetters(date.getDate()) + "." + this.twoLetters(date.getMonth() + 1) + "." + date.getFullYear();
+        return dateStr;
     }
     processCodeResponse(data) {
         if (data.code === undefined) {

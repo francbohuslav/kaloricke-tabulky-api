@@ -9,25 +9,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CaloriesCommand = void 0;
+exports.DeleteFoodCommand = void 0;
 const command_base_1 = require("./command-base");
-class CaloriesCommand extends command_base_1.CommandBase {
-    parse(questionRest) {
-        const { food, grams } = this.parseFoodAndGrams(questionRest);
-        this.food = food;
-        this.grams = grams;
-    }
+class DeleteFoodCommand extends command_base_1.CommandBase {
+    parse(_questionRest) { }
     execute(client) {
         return __awaiter(this, void 0, void 0, function* () {
-            const foods = yield client.searchFood(this.food);
-            if (foods.length === 0) {
-                return `Potravina ${this.food} nenanezena`;
+            const summary = yield client.getDiary(new Date());
+            const times = [...summary.times];
+            times.reverse();
+            let lastFood;
+            for (const time of times) {
+                if (time.foodstuff.length) {
+                    lastFood = time.foodstuff[time.foodstuff.length - 1];
+                    break;
+                }
             }
-            const cals = Math.round((parseInt(foods[0].value) / 100) * this.grams);
-            return `Potravina ${foods[0].title} má ${cals} kilokalorií`;
+            if (!lastFood) {
+                return "Není co mazat, dnes jsi zatím bez jídla";
+            }
+            yield client.deleteFoodUsage(lastFood.id);
+            return `Smazáno ${lastFood.title}`;
         });
     }
 }
-exports.CaloriesCommand = CaloriesCommand;
-CaloriesCommand.COMMAND = "kalorie";
-//# sourceMappingURL=calories.js.map
+exports.DeleteFoodCommand = DeleteFoodCommand;
+DeleteFoodCommand.COMMAND = "smaž poslední jídlo";
+//# sourceMappingURL=delete-food-command.js.map

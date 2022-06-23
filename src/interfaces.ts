@@ -64,7 +64,7 @@ interface IDiaryTime {
     energyTotalUnit: any;
 }
 
-interface IFoodUsage {
+export interface IFoodUsage {
     /** "912f1438c2954e1e847e6d318206c7f6" */
     id: string;
     /** null */

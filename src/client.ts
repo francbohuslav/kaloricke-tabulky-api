@@ -33,8 +33,7 @@ export class Client {
     }
 
     public async getDiary(date: Date): Promise<IDiaryDay> {
-        const dateStr = this.twoLetters(date.getDate()) + "." + this.twoLetters(date.getMonth() + 1) + "." + date.getFullYear();
-        const response = await axios.get<ICodeResponse<IDiaryDay>>(this.baseURL + `/user/diary/${dateStr}/get`, {
+        const response = await axios.get<ICodeResponse<IDiaryDay>>(this.baseURL + `/user/diary/${this.getDate(date)}/get`, {
             params: {
                 format: "json",
             },
@@ -47,8 +46,7 @@ export class Client {
     }
 
     public async getSummary(date: Date): Promise<IDiarySummary> {
-        const dateStr = this.twoLetters(date.getDate()) + "." + this.twoLetters(date.getMonth() + 1) + "." + date.getFullYear();
-        const response = await axios.get<ICodeResponse<IDiarySummary>>(this.baseURL + `/user/diary/summary/${dateStr}/get`, {
+        const response = await axios.get<ICodeResponse<IDiarySummary>>(this.baseURL + `/user/diary/summary/${this.getDate(date)}/get`, {
             params: {
                 format: "json",
             },
@@ -58,6 +56,56 @@ export class Client {
         });
         this.processCodeResponse(response.data);
         return response.data.data;
+    }
+
+    public async saveFood(food: IFoodDefinition, date: Date, grams: number, diaryTimeGuid: string): Promise<string> {
+        const dtoIn = {
+            guid: food.id,
+            title: food.title,
+            url: "potraviny/" + food.url,
+            date: this.getDate(date),
+            multiplier: grams.toString(),
+            diaryTimeGuid,
+            unitGuid: "0000000000000001",
+            unitOptions: [
+                {
+                    id: "0000000000000001",
+                    title: "1 g",
+                    multiplier: 1,
+                },
+            ],
+        };
+        console.log(dtoIn);
+        const response = await axios.post<ICodeResponse<string>>(this.baseURL + `/user/foodstuff/add`, dtoIn, {
+            params: {
+                format: "json",
+            },
+            headers: {
+                Cookie: "JSESSIONID=" + this.sessionId,
+            },
+        });
+        this.processCodeResponse(response.data);
+        return response.data.message;
+    }
+
+    public async deleteFoodUsage(id: string): Promise<void> {
+        const response = await axios.get<ICodeResponse<IDiarySummary>>(this.baseURL + `/user/diary/foodstuff/delete/${id}`, {
+            params: {
+                format: "json",
+            },
+            headers: {
+                Cookie: "JSESSIONID=" + this.sessionId,
+            },
+        });
+        this.processCodeResponse(response.data);
+        if (response.data.message != "OK") {
+            throw new KalTabError(response.data.message, response.data);
+        }
+    }
+
+    private getDate(date: Date): string {
+        const dateStr = this.twoLetters(date.getDate()) + "." + this.twoLetters(date.getMonth() + 1) + "." + date.getFullYear();
+        return dateStr;
     }
 
     private processCodeResponse<T>(data: ICodeResponse<T>) {

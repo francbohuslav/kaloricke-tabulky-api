@@ -7,15 +7,9 @@ export class CaloriesCommand extends CommandBase {
     grams: number;
 
     parse(questionRest: string): void {
-        const match = questionRest.match(/(.*) (\d+)\s?g(ramů)?$/);
-        console.log(match);
-        if (match) {
-            this.food = match[1];
-            this.grams = parseInt(match[2]);
-        } else {
-            this.food = questionRest.trim();
-            this.grams = 100;
-        }
+        const { food, grams } = this.parseFoodAndGrams(questionRest);
+        this.food = food;
+        this.grams = grams;
     }
 
     async execute(client: Client): Promise<string> {

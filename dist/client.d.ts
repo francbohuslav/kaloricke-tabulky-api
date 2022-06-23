@@ -6,6 +6,9 @@ export declare class Client {
     searchFood(query: string): Promise<IFoodDefinition[]>;
     getDiary(date: Date): Promise<IDiaryDay>;
     getSummary(date: Date): Promise<IDiarySummary>;
+    saveFood(food: IFoodDefinition, date: Date, grams: number, diaryTimeGuid: string): Promise<string>;
+    deleteFoodUsage(id: string): Promise<void>;
+    private getDate;
     private processCodeResponse;
     private twoLetters;
 }

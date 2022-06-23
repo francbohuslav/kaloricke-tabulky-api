@@ -9,9 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CaloriesCommand = void 0;
+exports.SaveFoodCommand = void 0;
 const command_base_1 = require("./command-base");
-class CaloriesCommand extends command_base_1.CommandBase {
+class SaveFoodCommand extends command_base_1.CommandBase {
     parse(questionRest) {
         const { food, grams } = this.parseFoodAndGrams(questionRest);
         this.food = food;
@@ -23,11 +23,26 @@ class CaloriesCommand extends command_base_1.CommandBase {
             if (foods.length === 0) {
                 return `Potravina ${this.food} nenanezena`;
             }
-            const cals = Math.round((parseInt(foods[0].value) / 100) * this.grams);
-            return `Potravina ${foods[0].title} má ${cals} kilokalorií`;
+            const now = new Date();
+            const message = yield client.saveFood(foods[0], now, this.grams, this.getFoodtime(now));
+            console.log(message);
+            return `Zapsáno ${foods[0].title} ${this.grams} gramů`;
         });
     }
+    getFoodtime(date) {
+        if (date.getHours() < 9)
+            return "1";
+        if (date.getHours() < 12)
+            return "2";
+        if (date.getHours() < 15)
+            return "3";
+        if (date.getHours() < 18)
+            return "4";
+        if (date.getHours() < 21)
+            return "5";
+        return "6";
+    }
 }
-exports.CaloriesCommand = CaloriesCommand;
-CaloriesCommand.COMMAND = "kalorie";
-//# sourceMappingURL=calories.js.map
+exports.SaveFoodCommand = SaveFoodCommand;
+SaveFoodCommand.COMMAND = "zapiš jídlo";
+//# sourceMappingURL=save-food-command.js.map

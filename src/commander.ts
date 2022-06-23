@@ -1,12 +1,16 @@
 import { Client } from "./client";
 import { CaloriesCommand } from "./commands/calories";
 import { CommandBase } from "./commands/command-base";
+import { DeleteFoodCommand } from "./commands/delete-food-command";
 import { MyCaloriesCommand } from "./commands/my-calories";
+import { SaveFoodCommand } from "./commands/save-food-command";
 
 export class Commander {
     commandRegistry: { [command: string]: typeof CommandBase } = {
         [CaloriesCommand.COMMAND]: CaloriesCommand,
         [MyCaloriesCommand.COMMAND]: MyCaloriesCommand,
+        [SaveFoodCommand.COMMAND]: SaveFoodCommand,
+        [DeleteFoodCommand.COMMAND]: DeleteFoodCommand,
     };
 
     constructor(private client: Client) {}

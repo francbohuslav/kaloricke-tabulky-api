@@ -11,13 +11,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Commander = void 0;
 const calories_1 = require("./commands/calories");
+const delete_food_command_1 = require("./commands/delete-food-command");
 const my_calories_1 = require("./commands/my-calories");
+const save_food_command_1 = require("./commands/save-food-command");
 class Commander {
     constructor(client) {
         this.client = client;
         this.commandRegistry = {
             [calories_1.CaloriesCommand.COMMAND]: calories_1.CaloriesCommand,
             [my_calories_1.MyCaloriesCommand.COMMAND]: my_calories_1.MyCaloriesCommand,
+            [save_food_command_1.SaveFoodCommand.COMMAND]: save_food_command_1.SaveFoodCommand,
+            [delete_food_command_1.DeleteFoodCommand.COMMAND]: delete_food_command_1.DeleteFoodCommand,
         };
     }
     execute(question) {
