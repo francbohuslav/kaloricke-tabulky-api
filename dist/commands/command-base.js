@@ -8,12 +8,14 @@ class CommandBase {
             return {
                 food: match[1],
                 grams: parseInt(match[2]),
+                gramsAreSpecified: true,
             };
         }
         else {
             return {
                 food: questionRest.trim(),
                 grams: 100,
+                gramsAreSpecified: false,
             };
         }
     }

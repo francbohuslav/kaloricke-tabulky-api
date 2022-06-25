@@ -15,7 +15,7 @@ export class Commander {
 
     constructor(private client: Client) {}
 
-    public async execute(question: string): Promise<string> {
+    public async execute(question: string, readOnly: boolean = false): Promise<string> {
         let command: CommandBase;
         let questionRest = "";
         try {
@@ -28,7 +28,7 @@ export class Commander {
         } catch (ex) {
             return ex.message;
         }
-        const answer = await command.execute(this.client);
+        const answer = await command.execute(this.client, readOnly);
         return answer;
     }
 

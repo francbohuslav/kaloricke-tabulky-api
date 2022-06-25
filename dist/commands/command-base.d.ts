@@ -5,7 +5,8 @@ export declare abstract class CommandBase {
     protected parseFoodAndGrams(questionRest: string): {
         food: string;
         grams: number;
+        gramsAreSpecified: boolean;
     };
     abstract parse(questionRest: string): void;
-    abstract execute(client: Client): Promise<string>;
+    abstract execute(client: Client, readOnly: boolean): Promise<string>;
 }

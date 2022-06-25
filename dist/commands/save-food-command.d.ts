@@ -4,7 +4,8 @@ export declare class SaveFoodCommand extends CommandBase {
     static COMMAND: string;
     food: string;
     grams: number;
+    gramsAreSpecified: boolean;
     parse(questionRest: string): void;
-    execute(client: Client): Promise<string>;
+    execute(client: Client, readOnly: boolean): Promise<string>;
     private getFoodtime;
 }

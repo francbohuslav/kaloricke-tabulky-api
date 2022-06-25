@@ -6,6 +6,6 @@ export declare class Commander {
         [command: string]: typeof CommandBase;
     };
     constructor(client: Client);
-    execute(question: string): Promise<string>;
+    execute(question: string, readOnly?: boolean): Promise<string>;
     private parseCommand;
 }

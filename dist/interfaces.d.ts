@@ -39,6 +39,86 @@ export interface IFoodDefinition {
     /** true */
     locked: boolean;
 }
+export interface IFoodDetail {
+    /** "4eb84f318e0bd5b3" */
+    guid: string;
+    /** "meloun vodní" */
+    title: string;
+    /** "potraviny/meloun-vodni" */
+    url: string;
+    /** "1" */
+    stringGuid: string;
+    diaryTimeOptions: IDiaryTime[];
+    /** "25.06.2022" */
+    date: string;
+    /** false */
+    timeUser: boolean;
+    /** null */
+    time: any;
+    /** 1 */
+    multiplier: number;
+    /** "0000000000000001" */
+    unitGuid: string;
+    unitOptions: IUnitOption[];
+    /** true */
+    showUnits: boolean;
+    /** null */
+    mealGuid: any;
+    /** null */
+    energy: any;
+    /** "kcal" */
+    energyUnit: string;
+    /** false */
+    detailValues: boolean;
+    /** null */
+    protein: any;
+    /** null */
+    carbohydrate: any;
+    /** null */
+    fat: any;
+    /** null */
+    fiber: any;
+    /** null */
+    saturatedFattyAcid: any;
+    /** null */
+    transFattyAcid: any;
+    /** null */
+    monoSaturated: any;
+    /** null */
+    polySaturated: any;
+    /** null */
+    cholesterol: any;
+    /** null */
+    sugar: any;
+    /** null */
+    calcium: any;
+    /** null */
+    salt: any;
+    /** null */
+    sodium: any;
+    /** null */
+    water: any;
+    /** null */
+    phe: any;
+    /** null */
+    alcohol: any;
+    /** false */
+    favorite: boolean;
+    /** 1 */
+    status: any;
+    /** null */
+    guidUserFrom: any;
+    /** null */
+    guidUserTo: any;
+}
+export interface IUnitOption {
+    /** "16167091bc35b299" */
+    id: string;
+    /** "1 g", "porce (200 g)", "100 g", "50 g" */
+    title: string;
+    /** 200 */
+    multiplier: number;
+}
 export interface IDiaryDay {
     date: number;
     energyUnit: string;
@@ -155,7 +235,7 @@ export interface IFoodUsage {
     isRecipe: boolean;
 }
 export interface IDiarySummary {
-    items: any;
+    items: IDiarySummaryItem[];
     itemsDynamic: any;
     activityEnergyTotal: number;
     foodstuffEnergyTotal: number;
@@ -165,5 +245,23 @@ export interface IDiarySummary {
     alcohol: any;
     mode: number;
     nutrientsFromActivities: boolean;
+}
+export interface IDiarySummaryItem {
+    /** 'Cílová hmotnost' */
+    title: string;
+    /** null */
+    titleShort: string;
+    /** 'kg' */
+    unit: string;
+    /** '76' */
+    goal: string;
+    /** '79,4' */
+    actual: string;
+    /** 104 */
+    percent: number;
+    /** 0 */
+    actualValue: number;
+    /** nulL */
+    code: any;
 }
 export {};

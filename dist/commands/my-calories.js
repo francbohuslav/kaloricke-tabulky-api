@@ -14,10 +14,12 @@ const command_base_1 = require("./command-base");
 class MyCaloriesCommand extends command_base_1.CommandBase {
     parse(_questionRest) { }
     execute(client) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const summary = yield client.getSummary(new Date());
             const totalCalories = summary.foodstuffEnergyTotal - summary.activityEnergyTotal;
-            return `Tvoje bilance je ${totalCalories} kilokalorií`;
+            const percent = summary.items[0] ? (_a = summary.items[0]) === null || _a === void 0 ? void 0 : _a.percent : "neznámo";
+            return `Tvoje bilance je ${percent}% neboli ${totalCalories} kilokalorií`;
         });
     }
 }

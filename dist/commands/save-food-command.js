@@ -13,20 +13,46 @@ exports.SaveFoodCommand = void 0;
 const command_base_1 = require("./command-base");
 class SaveFoodCommand extends command_base_1.CommandBase {
     parse(questionRest) {
-        const { food, grams } = this.parseFoodAndGrams(questionRest);
+        const { food, grams, gramsAreSpecified } = this.parseFoodAndGrams(questionRest);
         this.food = food;
         this.grams = grams;
+        this.gramsAreSpecified = gramsAreSpecified;
     }
-    execute(client) {
+    execute(client, readOnly) {
         return __awaiter(this, void 0, void 0, function* () {
             const foods = yield client.searchFood(this.food);
             if (foods.length === 0) {
                 return `Potravina ${this.food} nenanezena`;
             }
+            const food = foods[0];
+            const foodDetail = yield client.getFood(food.id);
+            let serving;
+            if (!this.gramsAreSpecified) {
+                const specifiedServings = foodDetail.unitOptions.filter((uo) => uo.multiplier != 1 && !(uo.multiplier == 100 && uo.title == "100 g"));
+                if (specifiedServings.length == 0) {
+                    return "Nedokážu určit vhodnou gramáž. Zkus to znova s gramy.";
+                }
+                serving = specifiedServings[0];
+                this.grams = serving.multiplier;
+            }
             const now = new Date();
-            const message = yield client.saveFood(foods[0], now, this.grams, this.getFoodtime(now));
-            console.log(message);
-            return `Zapsáno ${foods[0].title} ${this.grams} gramů`;
+            if (!readOnly) {
+                const message = yield client.saveFood(food, now, this.grams, this.getFoodtime(now));
+                console.log(message);
+            }
+            let servingString = "";
+            if (this.gramsAreSpecified) {
+                servingString = `${this.grams} gramů`;
+            }
+            else if (serving) {
+                if (serving.title.match(/\bg\b/)) {
+                    servingString = serving.title;
+                }
+                else {
+                    servingString = serving.title;
+                }
+            }
+            return `Zapsáno ${food.title} ${servingString}`;
         });
     }
     getFoodtime(date) {

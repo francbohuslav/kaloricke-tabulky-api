@@ -76,6 +76,20 @@ class Client {
             return response.data.data;
         });
     }
+    getFood(foodId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield axios_1.default.get(this.baseURL + `/user/foodstuff/add/form/${foodId}`, {
+                params: {
+                    format: "json",
+                },
+                headers: {
+                    Cookie: "JSESSIONID=" + this.sessionId,
+                },
+            });
+            this.processCodeResponse(response.data);
+            return response.data.data;
+        });
+    }
     saveFood(food, date, grams, diaryTimeGuid) {
         return __awaiter(this, void 0, void 0, function* () {
             const dtoIn = {

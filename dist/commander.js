@@ -24,7 +24,7 @@ class Commander {
             [delete_food_command_1.DeleteFoodCommand.COMMAND]: delete_food_command_1.DeleteFoodCommand,
         };
     }
-    execute(question) {
+    execute(question, readOnly = false) {
         return __awaiter(this, void 0, void 0, function* () {
             let command;
             let questionRest = "";
@@ -40,7 +40,7 @@ class Commander {
             catch (ex) {
                 return ex.message;
             }
-            const answer = yield command.execute(this.client);
+            const answer = yield command.execute(this.client, readOnly);
             return answer;
         });
     }

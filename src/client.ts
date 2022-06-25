@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ICodeResponse, IDiaryDay, IDiarySummary, IFoodDefinition, ILoginResponse } from "./interfaces";
+import { ICodeResponse, IDiaryDay, IDiarySummary, IFoodDefinition, IFoodDetail, ILoginResponse } from "./interfaces";
 import { KalTabError } from "./kal-tab-error";
 var md5 = require("md5");
 
@@ -47,6 +47,19 @@ export class Client {
 
     public async getSummary(date: Date): Promise<IDiarySummary> {
         const response = await axios.get<ICodeResponse<IDiarySummary>>(this.baseURL + `/user/diary/summary/${this.getDate(date)}/get`, {
+            params: {
+                format: "json",
+            },
+            headers: {
+                Cookie: "JSESSIONID=" + this.sessionId,
+            },
+        });
+        this.processCodeResponse(response.data);
+        return response.data.data;
+    }
+
+    public async getFood(foodId: string): Promise<IFoodDetail> {
+        const response = await axios.get<ICodeResponse<IFoodDetail>>(this.baseURL + `/user/foodstuff/add/form/${foodId}`, {
             params: {
                 format: "json",
             },

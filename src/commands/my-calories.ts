@@ -9,6 +9,7 @@ export class MyCaloriesCommand extends CommandBase {
     async execute(client: Client): Promise<string> {
         const summary = await client.getSummary(new Date());
         const totalCalories = summary.foodstuffEnergyTotal - summary.activityEnergyTotal;
-        return `Tvoje bilance je ${totalCalories} kilokalorií`;
+        const percent = summary.items[0] ? summary.items[0]?.percent : "neznámo";
+        return `Tvoje bilance je ${percent}% neboli ${totalCalories} kilokalorií`;
     }
 }

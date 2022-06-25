@@ -43,16 +43,20 @@ describe("Commander", () => {
 
     test("moje kalorie", async () => {
         const answer = await commander.execute("moje kalorie");
-        expect(answer).toMatch(/Tvoje bilance je \d+ kilokalorií/);
+        expect(answer).toMatch(/Tvoje bilance je \d+% neboli \d+ kilokalorií/);
     });
 
     //TODO: BF: smazani posledniho
     describe("zapiš jídlo", () => {
         test("meloun vodní 123 gramů", async () => {
-            let answer = await commander.execute("zapiš jídlo meloun vodní 123 gramů");
+            let answer = await commander.execute("zapiš jídlo meloun vodní 123 gramů", true);
             expect(answer).toBe("Zapsáno meloun vodní 123 gramů");
-            answer = await commander.execute("smaž poslední jídlo");
-            expect(answer).toBe("Smazáno meloun vodní");
+            answer = await commander.execute("zapiš jídlo meloun vodní", true);
+            expect(answer).toBe("Zapsáno meloun vodní porce (200 g)");
+            answer = await commander.execute("zapiš jídlo skyr jahoda bohušovická", true);
+            expect(answer).toBe("Zapsáno Skyr jahoda islandská tradice Bohušovická mlékárna velké balení (140 g)");
+            //answer = await commander.execute("smaž poslední jídlo");
+            //expect(answer).toBe("Smazáno meloun vodní");
         });
     });
 });
