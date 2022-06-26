@@ -1,9 +1,7 @@
 import { Client } from "src/client";
-import { CommandBase } from "./command-base";
-export declare class CaloriesCommand extends CommandBase {
+import { FoodCommandBase } from "./food-command-base";
+export declare class CaloriesCommand extends FoodCommandBase {
     static COMMAND: string;
-    food: string;
-    grams: number;
     parse(questionRest: string): void;
     execute(client: Client): Promise<string>;
 }

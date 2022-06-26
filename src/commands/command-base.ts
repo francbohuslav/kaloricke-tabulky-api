@@ -1,24 +1,14 @@
 import { Client } from "src/client";
+import { IDiarySummary } from "src/interfaces";
 
 export abstract class CommandBase {
     question: string;
     answer: string;
 
-    protected parseFoodAndGrams(questionRest: string): { food: string; grams: number; gramsAreSpecified: boolean } {
-        const match = questionRest.match(/(.*) (\d+)\s?g(ramů)?$/);
-        if (match) {
-            return {
-                food: match[1],
-                grams: parseInt(match[2]),
-                gramsAreSpecified: true,
-            };
-        } else {
-            return {
-                food: questionRest.trim(),
-                grams: 100,
-                gramsAreSpecified: false,
-            };
-        }
+    protected getBillanceString(summary: IDiarySummary): string {
+        const totalCalories = summary.foodstuffEnergyTotal - summary.activityEnergyTotal;
+        const percent = summary.items[0] ? summary.items[0]?.percent : "neznámo";
+        return `${percent}% neboli ${totalCalories} kilokalorií`;
     }
 
     abstract parse(questionRest: string): void;

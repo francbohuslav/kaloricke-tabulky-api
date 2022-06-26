@@ -10,49 +10,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SaveFoodCommand = void 0;
-const command_base_1 = require("./command-base");
-class SaveFoodCommand extends command_base_1.CommandBase {
+const food_command_base_1 = require("./food-command-base");
+class SaveFoodCommand extends food_command_base_1.FoodCommandBase {
     parse(questionRest) {
-        const { food, grams, gramsAreSpecified } = this.parseFoodAndGrams(questionRest);
-        this.food = food;
-        this.grams = grams;
-        this.gramsAreSpecified = gramsAreSpecified;
+        this.parseFoodAndGrams(questionRest);
     }
     execute(client, readOnly) {
         return __awaiter(this, void 0, void 0, function* () {
-            const foods = yield client.searchFood(this.food);
-            if (foods.length === 0) {
-                return `Potravina ${this.food} nenanezena`;
-            }
-            const food = foods[0];
-            const foodDetail = yield client.getFood(food.id);
-            let serving;
-            if (!this.gramsAreSpecified) {
-                const specifiedServings = foodDetail.unitOptions.filter((uo) => uo.multiplier != 1 && !(uo.multiplier == 100 && uo.title == "100 g"));
-                if (specifiedServings.length == 0) {
-                    return "Nedokážu určit vhodnou gramáž. Zkus to znova s gramy.";
-                }
-                serving = specifiedServings[0];
-                this.grams = serving.multiplier;
-            }
+            yield this.executeInternal(client);
             const now = new Date();
             if (!readOnly) {
-                const message = yield client.saveFood(food, now, this.grams, this.getFoodtime(now));
+                const message = yield client.saveFood(this.food, now, this.grams, this.getFoodtime(now));
                 console.log(message);
             }
-            let servingString = "";
-            if (this.gramsAreSpecified) {
-                servingString = `${this.grams} gramů`;
-            }
-            else if (serving) {
-                if (serving.title.match(/\bg\b/)) {
-                    servingString = serving.title;
-                }
-                else {
-                    servingString = serving.title;
-                }
-            }
-            return `Zapsáno ${food.title} ${servingString}`;
+            const summary = yield client.getSummary(now);
+            return `Zapsáno ${this.food.title} ${this.getServingString()}, celková bilance je ${this.getBillanceString(summary)}.`;
         });
     }
     getFoodtime(date) {

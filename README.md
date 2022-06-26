@@ -12,4 +12,7 @@ npm i francbohuslav/kaloricke-tabulky-api
 
 ## Quick start
 
-TODO
+Most important classes are
+
+-   Client - REST API client agains www.kaloricketabulky.cz
+-   Commander - executes czech language as commands to control www.kaloricketabulky.cz. Commands can be found in `commander.test.ts`.

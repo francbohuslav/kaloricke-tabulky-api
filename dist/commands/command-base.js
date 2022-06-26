@@ -2,22 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CommandBase = void 0;
 class CommandBase {
-    parseFoodAndGrams(questionRest) {
-        const match = questionRest.match(/(.*) (\d+)\s?g(ramů)?$/);
-        if (match) {
-            return {
-                food: match[1],
-                grams: parseInt(match[2]),
-                gramsAreSpecified: true,
-            };
-        }
-        else {
-            return {
-                food: questionRest.trim(),
-                grams: 100,
-                gramsAreSpecified: false,
-            };
-        }
+    getBillanceString(summary) {
+        var _a;
+        const totalCalories = summary.foodstuffEnergyTotal - summary.activityEnergyTotal;
+        const percent = summary.items[0] ? (_a = summary.items[0]) === null || _a === void 0 ? void 0 : _a.percent : "neznámo";
+        return `${percent}% neboli ${totalCalories} kilokalorií`;
     }
 }
 exports.CommandBase = CommandBase;

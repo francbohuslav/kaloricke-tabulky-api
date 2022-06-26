@@ -40,8 +40,12 @@ class Commander {
             catch (ex) {
                 return ex.message;
             }
-            const answer = yield command.execute(this.client, readOnly);
-            return answer;
+            try {
+                return yield command.execute(this.client, readOnly);
+            }
+            catch (ex) {
+                return ex.message;
+            }
         });
     }
     parseCommand(question) {

@@ -21,23 +21,23 @@ describe("Commander", () => {
     describe("kalorie", () => {
         test("jablko", async () => {
             const answer = await commander.execute("kalorie jablko");
-            expect(answer).toBe("Potravina jablko má 63 kilokalorií");
+            expect(answer).toBe("Potravina jablko malý kus (100 g) má 63 kilokalorií");
         });
 
         test("jablko 200 gramů", async () => {
             let answer = await commander.execute("kalorie jablko 150 gramů");
-            expect(answer).toBe("Potravina jablko má 95 kilokalorií");
+            expect(answer).toBe("Potravina jablko 150 gramů má 95 kilokalorií");
 
             answer = await commander.execute("kalorie jablko 150 g");
-            expect(answer).toBe("Potravina jablko má 95 kilokalorií");
+            expect(answer).toBe("Potravina jablko 150 gramů má 95 kilokalorií");
 
             answer = await commander.execute("kalorie jablko 150g");
-            expect(answer).toBe("Potravina jablko má 95 kilokalorií");
+            expect(answer).toBe("Potravina jablko 150 gramů má 95 kilokalorií");
         });
 
         test("mléko", async () => {
             const answer = await commander.execute("kalorie mléko");
-            expect(answer).toBe("Potravina mléko polotučné 1,5% tuku má 47 kilokalorií");
+            expect(answer).toBe("Potravina mléko polotučné 1,5% tuku malá sklenice (200 ml) má 94 kilokalorií");
         });
     });
 
@@ -45,16 +45,27 @@ describe("Commander", () => {
         const answer = await commander.execute("moje kalorie");
         expect(answer).toMatch(/Tvoje bilance je \d+% neboli \d+ kilokalorií/);
     });
+    //TODO: BF: zkusit cover testy
 
-    //TODO: BF: smazani posledniho
     describe("zapiš jídlo", () => {
         test("meloun vodní 123 gramů", async () => {
             let answer = await commander.execute("zapiš jídlo meloun vodní 123 gramů", true);
-            expect(answer).toBe("Zapsáno meloun vodní 123 gramů");
+            expect(answer).toMatch(/Zapsáno meloun vodní 123 gramů, celková bilance je \d+% neboli \d+ kilokalorií./);
+
             answer = await commander.execute("zapiš jídlo meloun vodní", true);
-            expect(answer).toBe("Zapsáno meloun vodní porce (200 g)");
+            expect(answer).toMatch(/Zapsáno meloun vodní porce \(200 g\), celková bilance je \d+% neboli \d+ kilokalorií./);
+
             answer = await commander.execute("zapiš jídlo skyr jahoda bohušovická", true);
-            expect(answer).toBe("Zapsáno Skyr jahoda islandská tradice Bohušovická mlékárna velké balení (140 g)");
+            expect(answer).toMatch(
+                /Zapsáno Skyr jahoda islandská tradice Bohušovická mlékárna velké balení \(140 g\), celková bilance je \d+% neboli \d+ kilokalorií./
+            );
+
+            answer = await commander.execute("zapiš jídlo Martinský rohlík s mákem", true);
+            expect(answer).toBe("Nedokážu určit vhodnou gramáž. Zkus to znova s gramy.");
+
+            answer = await commander.execute("zapiš jídlo žlababa", true);
+            expect(answer).toBe("Potravina žlababa nenanezena");
+
             //answer = await commander.execute("smaž poslední jídlo");
             //expect(answer).toBe("Smazáno meloun vodní");
         });

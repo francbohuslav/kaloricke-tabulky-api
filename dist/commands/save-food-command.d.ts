@@ -1,10 +1,7 @@
 import { Client } from "src/client";
-import { CommandBase } from "./command-base";
-export declare class SaveFoodCommand extends CommandBase {
+import { FoodCommandBase } from "./food-command-base";
+export declare class SaveFoodCommand extends FoodCommandBase {
     static COMMAND: string;
-    food: string;
-    grams: number;
-    gramsAreSpecified: boolean;
     parse(questionRest: string): void;
     execute(client: Client, readOnly: boolean): Promise<string>;
     private getFoodtime;

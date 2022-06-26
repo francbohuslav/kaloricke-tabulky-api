@@ -1,23 +1,16 @@
 import { Client } from "src/client";
-import { CommandBase } from "./command-base";
+import { FoodCommandBase } from "./food-command-base";
 
-export class CaloriesCommand extends CommandBase {
+export class CaloriesCommand extends FoodCommandBase {
     static COMMAND: string = "kalorie";
-    food: string;
-    grams: number;
 
     parse(questionRest: string): void {
-        const { food, grams } = this.parseFoodAndGrams(questionRest);
-        this.food = food;
-        this.grams = grams;
+        this.parseFoodAndGrams(questionRest);
     }
 
     async execute(client: Client): Promise<string> {
-        const foods = await client.searchFood(this.food);
-        if (foods.length === 0) {
-            return `Potravina ${this.food} nenanezena`;
-        }
-        const cals = Math.round((parseInt(foods[0].value) / 100) * this.grams);
-        return `Potravina ${foods[0].title} má ${cals} kilokalorií`;
+        await this.executeInternal(client);
+        const cals = Math.round((parseInt(this.food.value) / 100) * this.grams);
+        return `Potravina ${this.food.title} ${this.getServingString()} má ${cals} kilokalorií`;
     }
 }

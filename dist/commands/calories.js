@@ -10,21 +10,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CaloriesCommand = void 0;
-const command_base_1 = require("./command-base");
-class CaloriesCommand extends command_base_1.CommandBase {
+const food_command_base_1 = require("./food-command-base");
+class CaloriesCommand extends food_command_base_1.FoodCommandBase {
     parse(questionRest) {
-        const { food, grams } = this.parseFoodAndGrams(questionRest);
-        this.food = food;
-        this.grams = grams;
+        this.parseFoodAndGrams(questionRest);
     }
     execute(client) {
         return __awaiter(this, void 0, void 0, function* () {
-            const foods = yield client.searchFood(this.food);
-            if (foods.length === 0) {
-                return `Potravina ${this.food} nenanezena`;
-            }
-            const cals = Math.round((parseInt(foods[0].value) / 100) * this.grams);
-            return `Potravina ${foods[0].title} má ${cals} kilokalorií`;
+            yield this.executeInternal(client);
+            const cals = Math.round((parseInt(this.food.value) / 100) * this.grams);
+            return `Potravina ${this.food.title} ${this.getServingString()} má ${cals} kilokalorií`;
         });
     }
 }

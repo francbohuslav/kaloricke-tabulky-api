@@ -1,56 +1,26 @@
 import { Client } from "src/client";
-import { IUnitOption } from "src/interfaces";
-import { CommandBase } from "./command-base";
+import { FoodCommandBase } from "./food-command-base";
 
-export class SaveFoodCommand extends CommandBase {
+export class SaveFoodCommand extends FoodCommandBase {
     static COMMAND: string = "zapiš jídlo";
 
-    food: string;
-    grams: number;
-    gramsAreSpecified: boolean;
-
     parse(questionRest: string): void {
-        const { food, grams, gramsAreSpecified } = this.parseFoodAndGrams(questionRest);
-        this.food = food;
-        this.grams = grams;
-        this.gramsAreSpecified = gramsAreSpecified;
+        this.parseFoodAndGrams(questionRest);
     }
 
     async execute(client: Client, readOnly: boolean): Promise<string> {
-        const foods = await client.searchFood(this.food);
-        if (foods.length === 0) {
-            return `Potravina ${this.food} nenanezena`;
-        }
-        const food = foods[0];
-        const foodDetail = await client.getFood(food.id);
-        let serving: IUnitOption | undefined;
-        if (!this.gramsAreSpecified) {
-            const specifiedServings = foodDetail.unitOptions.filter((uo) => uo.multiplier != 1 && !(uo.multiplier == 100 && uo.title == "100 g"));
-            if (specifiedServings.length == 0) {
-                return "Nedokážu určit vhodnou gramáž. Zkus to znova s gramy.";
-            }
-            serving = specifiedServings[0];
-            this.grams = serving.multiplier;
-        }
+        await this.executeInternal(client);
 
         const now = new Date();
 
         if (!readOnly) {
-            const message = await client.saveFood(food, now, this.grams, this.getFoodtime(now));
+            const message = await client.saveFood(this.food, now, this.grams, this.getFoodtime(now));
             console.log(message);
         }
 
-        let servingString: string = "";
-        if (this.gramsAreSpecified) {
-            servingString = `${this.grams} gramů`;
-        } else if (serving) {
-            if (serving!.title.match(/\bg\b/)) {
-                servingString = serving.title;
-            } else {
-                servingString = serving.title;
-            }
-        }
-        return `Zapsáno ${food.title} ${servingString}`;
+        const summary = await client.getSummary(now);
+
+        return `Zapsáno ${this.food.title} ${this.getServingString()}, celková bilance je ${this.getBillanceString(summary)}.`;
     }
 
     private getFoodtime(date: Date): string {

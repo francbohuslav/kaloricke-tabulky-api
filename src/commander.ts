@@ -28,8 +28,11 @@ export class Commander {
         } catch (ex) {
             return ex.message;
         }
-        const answer = await command.execute(this.client, readOnly);
-        return answer;
+        try {
+            return await command.execute(this.client, readOnly);
+        } catch (ex) {
+            return ex.message;
+        }
     }
 
     private parseCommand(question: string): [CommandBase, string] {
